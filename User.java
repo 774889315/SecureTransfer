@@ -1,5 +1,6 @@
 import java.io.*;
 import java.security.MessageDigest;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class User {
@@ -17,6 +18,11 @@ public class User {
 		publicEncryptionKey = EncryptionKey.get("publicKey");
 		privateSignatureKey = SignatureKey.get("privateKey");
 		privateEncryptionKey = EncryptionKey.get("privateKey");
+	}
+	
+	public void sendFile(File file, int toId, boolean sign) throws Exception {
+		if (toId != -1) sendFile(file, toId, true, sign, new FileOutputStream(Global.PUBLIC_PATH + file.getName()));
+		else sendFile(file, -1, false, sign, new FileOutputStream(Global.PUBLIC_PATH + file.getName()));
 	}
 	
 	public void sendFile(File file, int toId, boolean encrypt, boolean sign, OutputStream out) throws Exception {
@@ -47,6 +53,10 @@ public class User {
 		}
 		System.out.println("文件发送成功！耗时" + (System.currentTimeMillis() - t) + "毫秒\n");
 		f.close();
+	}
+	
+	public void receiveFile(File file) throws Exception {
+		receiveFile(new FileInputStream(Global.PUBLIC_PATH + file), new File(Global.PRIVATE_PATH + file.getName()));
 	}
 	
 	public void receiveFile(InputStream in, File file) throws Exception {
@@ -97,5 +107,15 @@ public class User {
 		}
 		System.out.println("文件接收成功！耗时" + (System.currentTimeMillis() - t) + "毫秒\n");
 		f.close();
+	}
+	
+	public FileInfo[] getFileList() throws Exception {
+		File dir = new File(Global.PUBLIC_PATH);
+		File[] file = dir.listFiles();
+		FileInfo[] list = new FileInfo[file.length];
+		for (int i = 0; i < file.length; i++) {
+			list[i] = new FileInfo(file[i]);
+		}
+		return list;
 	}
 }
