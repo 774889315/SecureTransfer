@@ -51,12 +51,12 @@ public class User {
 			out.write(0);
 			out.write(RSAUtil.privateEncrypt(md.digest(), RSAUtil.getPrivateKey(privateSignatureKey)));
 		}
-		System.out.println("文件发送成功！耗时" + (System.currentTimeMillis() - t) + "毫秒\n");
+		System.out.println("文件发送成功！耗时" + (System.currentTimeMillis() - t) + "毫秒");
 		f.close();
 	}
 	
 	public void receiveFile(File file) throws Exception {
-		receiveFile(new FileInputStream(Global.PUBLIC_PATH + file), new File(Global.PRIVATE_PATH + file.getName()));
+		receiveFile(new FileInputStream(Global.PUBLIC_PATH + file), new File(Global.PRIVATE_PATH + id + "\\" + file.getName()));
 	}
 	
 	public void receiveFile(InputStream in, File file) throws Exception {
@@ -105,7 +105,7 @@ public class User {
 			if (ok) System.out.println("签名校验成功！");
 			else System.err.println("警告：签名校验失败！");
 		}
-		System.out.println("文件接收成功！耗时" + (System.currentTimeMillis() - t) + "毫秒\n");
+		System.out.println("文件接收成功！耗时" + (System.currentTimeMillis() - t) + "毫秒");
 		f.close();
 	}
 	
